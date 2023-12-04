@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "webcrawler"
+version = "0.1.0"
+description = ""
+authors = ["Julio Marquez <marquezcastrojulio@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+beautifulsoup4 = "^4.12.2"
+requests = "^2.31.0"
+pytest = "^7.4.3"
+pytest-cov = "^4.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
