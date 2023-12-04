@@ -1,4 +1,5 @@
-from webcrawler.main import WebCrawler, LinkParser
+from webcrawler.main import LinkParser
+from webcrawler.main import WebCrawler
 
 
 def test_handle_starttag():

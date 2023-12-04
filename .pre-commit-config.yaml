@@ -135,7 +135,6 @@ repos:
       - id: mypy
         args:
           - -v
-          - --config-file=mypy.ini
         additional_dependencies:
           - hypothesis
           - pytest
@@ -147,5 +146,5 @@ repos:
     rev: 1.7.5
     hooks:
       - id: bandit
-        args:
-          - --ini=.bandit
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]

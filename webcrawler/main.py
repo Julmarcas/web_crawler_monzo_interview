@@ -1,7 +1,9 @@
-from html.parser import HTMLParser
-from urllib.parse import urlparse, urljoin
-from concurrent.futures import ThreadPoolExecutor
 import time
+from concurrent.futures import ThreadPoolExecutor
+from html.parser import HTMLParser
+from urllib.parse import urljoin
+from urllib.parse import urlparse
+
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -22,7 +24,7 @@ class LinkParser(HTMLParser):
     def __init__(self, base_url: str) -> None:
         super().__init__()
         self.base_url = base_url
-        self.links = []
+        self.links: list[str] = []
 
     def handle_starttag(self, tag, attrs) -> None:
         """
@@ -45,8 +47,8 @@ class WebCrawler:
     def __init__(self, url: str, max_workers=5):
         self.start_url = url
         self.base_url = urlparse(url).scheme + "://" + urlparse(url).netloc
-        self.visited_urls = set()
-        self.new_links = set()
+        self.visited_urls: set[str] = set()
+        self.new_links: set[str] = set()
         self.link_counter = 0
         self.max_workers = max_workers
 
