@@ -44,7 +44,7 @@ class LinkParser(HTMLParser):
 
 
 class WebCrawler:
-    def __init__(self, url: str, max_workers=5):
+    def __init__(self, url: str, max_workers: int = 5):
         self.start_url = url
         self.base_url = urlparse(url).scheme + "://" + urlparse(url).netloc
         self.visited_urls: set[str] = set()
@@ -52,7 +52,7 @@ class WebCrawler:
         self.link_counter = 0
         self.max_workers = max_workers
 
-        # Configure Retry and HTTPAdapter
+        # Retry 3 times with a backoff factor of 0.5 seconds
         retries = Retry(
             total=3, backoff_factor=0.5, status_forcelist=[500, 502, 503, 504]
         )
@@ -96,10 +96,19 @@ class WebCrawler:
         }
 
     def crawl(self, current_url: str) -> None:
+        """
+        Crawls the given URL and its subdomains, recursively following links.
+
+        Args:
+            current_url (str): The URL to crawl.
+
+        Returns:
+            None
+        """
         if current_url in self.visited_urls or not self.is_same_subdomain(current_url):
             return
 
-        print("Visiting:", current_url)
+        print("Checking:", current_url)
         self.visited_urls.add(current_url)
 
         try:
@@ -109,7 +118,7 @@ class WebCrawler:
             new_links = links - self.visited_urls - self.new_links
             self.new_links.update(new_links)
             self.link_counter += len(new_links)
-            self.print_links(new_links)
+            self.print_links(links)
 
             with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
                 futures = [executor.submit(self.crawl, link) for link in new_links]
@@ -120,19 +129,28 @@ class WebCrawler:
         except requests.RequestException as e:
             print(f"Error crawling {current_url}: {e}")
 
-    def print_links(self, links: set) -> None:
-        print("New links on this page:")
+    def print_links(self, links):
+        """
+        Print the list of links found on a page.
+
+        Args:
+            links (list): A list of links to be printed.
+        """
+        print("list of links found on this page:")
         for link in links:
             print("-", link)
 
     def start(self) -> None:
+        """
+        Starts the web crawling process from the start URL.
+        """
         self.crawl(self.start_url)
         print("Total number of unique new links found:", self.link_counter)
 
 
 if __name__ == "__main__":
     START_URL = "https://monzo.com"
-    crawler = WebCrawler(START_URL, 3)
+    crawler = WebCrawler(START_URL, max_workers=2)
     start_time = time.time()
     try:
         crawler.start()
