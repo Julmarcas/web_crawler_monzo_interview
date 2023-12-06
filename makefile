@@ -9,4 +9,4 @@ run: 		  ## Run the webcrawler
 	poetry run python3 -m webcrawler.main
 
 test: 		  ## Run the tests
-	poetry run pytest -vv --cov=webcrawler --cov-report=term-missing
+	poetry run pytest -vv --cov=webcrawler --cov-report=term-missing --cov-report=html
