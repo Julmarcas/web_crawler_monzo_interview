@@ -150,7 +150,7 @@ class WebCrawler:
 
 if __name__ == "__main__":
     START_URL = "https://monzo.com"
-    crawler = WebCrawler(START_URL, max_workers=2)
+    crawler = WebCrawler(START_URL, max_workers=3)
     start_time = time.time()
     try:
         crawler.start()
