@@ -33,7 +33,7 @@ See the pytest docs for more cli options: [pytest-usage](https://docs.pytest.org
 
 This project incorporates pre-commit integration, featuring a set of hooks meticulously designed to uphold and maintain coding standards.
 
-To execute pre-commit:
+To utilize pre-commit, you must first initialize a Git repository using git init and subsequently add a remote configuration to enable pre-commit functionality:
 
 - Install [pre-commit](https://pre-commit.com/) 3.5.0
 - Set up pre-commit hooks: `pre-commit install`
