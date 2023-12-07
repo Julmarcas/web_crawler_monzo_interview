@@ -86,16 +86,6 @@ class TestWebCrawler:
 
         assert web_crawler_instance.crawl.call_count == 3
 
-    def test_handle_starttag(self):
-        """
-        Test case for the handle_starttag method of the LinkParser class.
-        """
-        link_parser = LinkParser("https://www.google.com")
-        link_parser.handle_starttag("a", [("href", "https://www.google.com/about")])
-
-        assert len(link_parser.links) == 1
-        assert "https://www.google.com/about" in link_parser.links
-
     def test_is_same_subdomain(self):
         """
         Test case for the is_same_subdomain method of the WebCrawler class.
@@ -127,3 +117,19 @@ class TestWebCrawler:
             "https://www.example.com/about",
             "https://www.example.com/info",
         }
+
+
+class TestLinkParser:
+    """
+    Test class for the LinkParser class.
+    """
+
+    def test_handle_starttag(self):
+        """
+        Test case for the handle_starttag method of the LinkParser class.
+        """
+        link_parser = LinkParser("https://www.google.com")
+        link_parser.handle_starttag("a", [("href", "https://www.google.com/about")])
+
+        assert len(link_parser.links) == 1
+        assert "https://www.google.com/about" in link_parser.links

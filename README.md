@@ -4,13 +4,14 @@ A simple web crawler written in Python that recursively crawls a website, prints
 
 ## Requirements
 
-- Python ^3.12
-- Poetry 1.7.1 - tool for dependency management and packaging
+- Python 3.12
+- [Poetry](https://python-poetry.org/docs/) 1.7.1 - tool for dependency management and packaging
 
 ## Getting Started
 
 1. Meet the [requirements](#requirements)
 2. Install the dependencies using Poetry: `poetry install`
+3. Follow [Usage](#usage) to execute the project.
 
 ## Usage
 
@@ -30,37 +31,63 @@ See the pytest docs for more cli options: [pytest-usage](https://docs.pytest.org
 
 ## Pre-commit
 
-This project includes the configuration for pre-commit integration, with a set of hooks intended to preserve standards.
+This project incorporates pre-commit integration, featuring a set of hooks meticulously designed to uphold and maintain coding standards.
 
 To execute pre-commit:
 
+- Install [pre-commit](https://pre-commit.com/) 3.5.0
 - Set up pre-commit hooks: `pre-commit install`
 - Execute all pre-commit hooks without committing changes: `run --all-files`
 
-## Decision log
+## Decision Log
 
-- Use HTMLParser instead of BeautifulSoup for html parsing as it simplifies its use, does not add dependencies and the only element we are currently interested in for this project are the links.
-  - Consideration: This basic parser may not handle complex HTML structures or malformed HTML.
-- A fixed timeout of 5 seconds is used for each request.
-  - Consideration: Different pages may require different timeout values. Dynamic adjustment based on response time or handling timeouts more gracefully could be considered.
-- Logging is minimal, printing to the console for simplicity
-  - Consideration: For a production-level application, more comprehensive logging, possibly with log levels, could aid in debugging and monitoring.
-- I faced expected HTTP error 443, implemented a retry mechanism with delays between requests.
-- Logic has been integrated to calculate the execution time in order to be able to analyse results based on different configuration parameters.
-- Logic has been implemented to calculate the number of unique links visited, just out of curiosity.
+- **HTML Parsing Technique:**
+
+  - Decision: Utilize HTMLParser instead of BeautifulSoup for HTML parsing.
+  - Rationale: Simplifies usage, avoids adding dependencies, and aligns with the project's focus on extracting links.
+  - Consideration: The basic parser may struggle with complex HTML structures or malformed HTML.
+
+- **Request Timeout Setting:**
+
+  - Decision: Set a fixed timeout of 5 seconds for each request.
+  - Rationale: Ensures a uniform timeout across requests for simplicity.
+  - Consideration: Different pages might necessitate varied timeout values; dynamic adjustment based on response time could be explored for flexibility.
+
+- **Logging Approach:**
+
+  - Decision: Adopt minimal logging, with outputs to the console for simplicity.
+  - Rationale: Time constraints.
+  - Consideration: For a production-level application, comprehensive logging with log levels could enhance debugging and monitoring.
+
+- **Handling HTTP Error 443:**
+
+  - Challenge: Faced an expected HTTP error 443.
+  - Solution: Implemented a retry mechanism with delays between requests.
+
+- **Execution Time Calculation:**
+
+  - Logic: Integrated functionality to calculate execution time.
+  - Purpose: Facilitates analysis of results under different configuration parameters.
+
+- **Unique Links Tracking:**
+  - Logic: Implemented a mechanism to count the number of unique links visited.
+  - Purpose: Driven by curiosity, adds a metric for evaluating the scale of link exploration.
 
 ## Improvements
 
-Points on which I consider that this exercise can be improved but which I have not applied in order to keep within the suggested time scale.
+Areas where I believe this exercise could be enhanced exist, yet I refrained from implementing them to adhere to the suggested time constraints.
 
-- Logging instead of Printing: Generate a log system suitable for a production system, with different levels and that can be used to print the visited links.
-- Exception Handling; Improve the handling of exceptions by capturing more specific exceptions that allow handling different types of errors appropriately.
-- Test coverage: Increase test coverage, currently 80%.
-- Encapsulate the tool as a cli tool using a library such as [Typer](https://typer.tiangolo.com/) that allows command line argument management and configuration.
+- **Logging Over Printing:** Develop a robust logging system tailored for a production environment, incorporating various levels, and capable of documenting visited links.
+
+- **Exception Handling Enhancement:** Elevate the exception-handling mechanism by capturing more specific exceptions, enabling the appropriate handling of diverse error types.
+
+- **Test Coverage Augmentation:** Enhance the current test coverage, currently standing at 81%, to ensure a more comprehensive examination of the codebase.
+
+- **CLI Tool Encapsulation:** Encapsulate the tool as a command-line interface (CLI) tool using a library such as [Typer](https://typer.tiangolo.com/). This allows efficient command line argument management and configuration, enhancing usability and accessibility.
 
 ## Tests performed and results
 
-I have done several tests with different configurations for the workers and these are the results:
+I have conducted numerous tests employing various configurations for the workers, and the ensuing results are as follows:
 
 - Workers 3:
   - Total number of unique new links found: 3505
@@ -72,4 +99,4 @@ I have done several tests with different configurations for the workers and thes
   - Total number of unique new links found: 3507
   - Elapsed time: 557.209639787674
 
-This is just a sample of all the tests carried out. The number of unique links remains relatively stable but the time can obviously vary depending on the response time, but there is a clear improvement in performance.
+This represents only a subset of the comprehensive tests conducted. While the count of unique links exhibits relative stability, the elapsed time naturally fluctuates based on response times. Notably, there is a discernible enhancement in overall performance.

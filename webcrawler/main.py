@@ -12,13 +12,6 @@ from urllib3.util.retry import Retry
 class LinkParser(HTMLParser):
     """
     A class for parsing HTML and extracting links.
-
-    Attributes:
-        base_url (str): The base URL of the HTML page being parsed.
-        links (list): A list of extracted links.
-
-    Methods:
-        handle_starttag(tag, attrs): Handles the start tag of an HTML element.
     """
 
     def __init__(self, base_url: str) -> None:
@@ -44,6 +37,10 @@ class LinkParser(HTMLParser):
 
 
 class WebCrawler:
+    """
+    A web crawler that recursively crawls a website and extracts links belonging to the same subdomain as the start URL.
+    """
+
     def __init__(self, url: str, max_workers: int = 5):
         self.start_url = url
         self.base_url = urlparse(url).scheme + "://" + urlparse(url).netloc
@@ -52,7 +49,7 @@ class WebCrawler:
         self.link_counter = 0
         self.max_workers = max_workers
 
-        # Retry 3 times with a backoff factor of 0.5 seconds
+        # Retry 3 times with a backoff factor of 0.5
         retries = Retry(
             total=3, backoff_factor=0.5, status_forcelist=[500, 502, 503, 504]
         )
@@ -88,7 +85,7 @@ class WebCrawler:
         except AssertionError as e:
             print(f"Error parsing HTML content: {e}")
             return set()
-        parser.feed(html_content)
+
         return {
             urljoin(self.start_url, link)
             for link in parser.links
@@ -113,7 +110,8 @@ class WebCrawler:
 
         try:
             response = self.session.get(current_url, timeout=5)
-            response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
+            response.raise_for_status()
+
             links = self.parse_links(response.text)
             new_links = links - self.visited_urls - self.new_links
             self.new_links.update(new_links)
